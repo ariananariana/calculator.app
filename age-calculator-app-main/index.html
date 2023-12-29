@@ -1,37 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./assets/images/favicon-32x32.png">
-  
-  <title>Frontend Mentor | Age calculator app</title>
+        form {
+            text-align: center;
+        }
 
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
+        input, button {
+            margin: 5px;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
+    <form id="ageForm">
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" required>
+        <button type="button" onclick="calculateAge()">Calculate Age</button>
+        <div id="result"></div>
+    </form>
 
-  Day
-  DD
+    <script>
+        function calculateAge() {
+            const dobInput = document.getElementById('dob');
+            const resultContainer = document.getElementById('result');
 
-  Month
-  MM
+            const dob = new Date(dobInput.value);
+            const currentDate = new Date();
 
-  Year
-  YYYY
+            if (!dobInput.checkValidity()) {
+                resultContainer.innerHTML = '<div class="error">Please enter a valid date.</div>';
+                return;
+            }
 
-  -- years
-  -- months
-  -- days
-  
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
-  </div>
+            if (dob > currentDate) {
+                resultContainer.innerHTML = '<div class="error">Date of Birth cannot be in the future.</div>';
+                return;
+            }
+
+            const ageInMilliseconds = currentDate - dob;
+            const ageInYears = Math.floor(ageInMilliseconds / (365.25 * 24 * 60 * 60 * 1000));
+            const remainingMilliseconds = ageInMilliseconds % (365.25 * 24 * 60 * 60 * 1000);
+            const ageInMonths = Math.floor(remainingMilliseconds / (30.44 * 24 * 60 * 60 * 1000));
+            const ageInDays = Math.floor((remainingMilliseconds % (30.44 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
+
+            resultContainer.innerHTML = `
+                <div>Age: ${ageInYears} years, ${ageInMonths} months, ${ageInDays} days</div>
+            `;
+        }
+    </script>
 </body>
 </html>
